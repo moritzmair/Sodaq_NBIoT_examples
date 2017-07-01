@@ -112,13 +112,18 @@ bool Sodaq_UBlox_GPS::scan(bool leave_on, uint32_t timeout)
         if (_seenLatLon
                 && _seenTime
                 && _seenAlt
-                && (_minNumSatellites == 0 || _numSatellites >= _minNumSatellites)) {
+                && (_minNumSatellites == 0 || _numSatellites >= 3)) {
+//               && (_minNumSatellites == 0 || _numSatellites >= _minNumSatellites)) {
             ++fix_count;
             if (fix_count >= _minNumOfLines) {
                 retval = true;
                 break;
             }
         }
+    //debugPrint("Num satellites ");
+    //debugPrintLn(_numSatellites);
+    //debugPrint("LatLon ");
+    //debugPrintLn(_seenLatLon);
     }
 
     if (_numSatellites > 0) {
@@ -159,15 +164,15 @@ bool Sodaq_UBlox_GPS::parseLine(const char * line)
     String data = line + 1;
     data.remove(data.length() - 3, 3);  // Strip checksum *<hex><hex>
 
-    if (data.startsWith("GPGGA")) {
+    if (data.startsWith("GNGGA")) {
         return parseGPGGA(data);
     }
 
-    if (data.startsWith("GPGSA")) {
+    if (data.startsWith("GNGSA")) {
         return parseGPGSA(data);
     }
 
-    if (data.startsWith("GPRMC")) {
+    if (data.startsWith("GNRMC")) {
         return parseGPRMC(data);
     }
 
@@ -175,15 +180,15 @@ bool Sodaq_UBlox_GPS::parseLine(const char * line)
         return parseGPGSV(data);
     }
 
-    if (data.startsWith("GPGLL")) {
+    if (data.startsWith("GNGLL")) {
         return parseGPGLL(data);
     }
 
-    if (data.startsWith("GPVTG")) {
+    if (data.startsWith("GNVTG")) {
         return parseGPVTG(data);
     }
 
-    if (data.startsWith("GPTXT")) {
+    if (data.startsWith("$GPTXT")) {
         return parseGPTXT(data);
     }
 
@@ -323,7 +328,8 @@ bool Sodaq_UBlox_GPS::parseGPGSV(const String & line)
     // We could/should only use msgNum == 1. However, all messages should have
     // the same numSV.
     _numSatellites = getField(line, 3).toInt();
-
+   // debugPrint("Num satellites ");
+   // debugPrintLn(_numSatellites);
     return true;
 }
 
