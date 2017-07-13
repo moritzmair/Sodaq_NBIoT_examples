@@ -8,6 +8,28 @@
 
 ***************************************************************************/
 
+/*****
+ * ATT Settings
+ * 
+ * create a new asset as Number
+ * 
+ * device decoding:
+
+ {
+  "sense": [
+    {
+      "asset": "<asset id>",
+      "value": {
+        "byte": 0,
+        "bytelength": 2,
+        "type": "integer",
+        "calculation": "val / 100"
+      }
+    }
+  ]
+}
+ */
+
 #include <Arduino.h>
 #include <Wire.h>
 // #include <SoftwareSerial.h> // Uno
@@ -66,18 +88,32 @@ void setup()
 }
 
 
-void loop() 
+void loop()
 {
   // Create the message
-  String message = String(hts221.readTemperature()) + "C"+
-                    ",  " + String(hts221.readHumidity()) + "%";
-
-  // Print the message we want to send
-  DEBUG_STREAM.println(message);
-
-  // Send the message
-  nbiot.sendMessage(message);
-
-  // Wait some time between messages
-	delay(10000); // 1000 = 1 sec
+  byte message[8] ;
+  uint16_t cursor = 0;
+  int16_t help;
+ 
+  help = hts221.readTemperature()*100;
+  DEBUG_STREAM.println(help);
+  message[cursor++] = help >> 8;
+  message[cursor++] = help;
+ 
+    // Print the message we want to send
+  //DEBUG_STREAM.println(message);
+      for (int i=0;i<cursor;i++) {
+      if (message[i]<10) {
+        DEBUG_STREAM.print("0");
+      }
+      DEBUG_STREAM.print(message[i], HEX);
+      DEBUG_STREAM.print(":");
+    }
+    DEBUG_STREAM.println();
+ 
+    // Send the message
+    nbiot.sendMessage(message, cursor);
+   
+    // Wait some time between messages
+    delay(10000); // 1000 = 1 sec
 }
