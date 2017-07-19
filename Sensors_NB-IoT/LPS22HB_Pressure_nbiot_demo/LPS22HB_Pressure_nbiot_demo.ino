@@ -10,8 +10,7 @@
  ***************************************************************************/
 
 #include <Wire.h>
-#include <Sodaq_wdt.h>
-#include "Sodaq_nbIOT.h"
+#include <Sodaq_nbIOT.h>
 #include "Sodaq_LPS22HB.h"
 
 #if defined(ARDUINO_AVR_LEONARDO)

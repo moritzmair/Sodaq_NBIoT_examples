@@ -11,8 +11,7 @@
 #include <Arduino.h>
 #include <Wire.h>
 // #include <SoftwareSerial.h> // Uno
-#include <Sodaq_wdt.h>
-#include "Sodaq_nbIOT.h"
+#include <Sodaq_nbIOT.h>
 #include "Sodaq_HTS221.h"
 
 #if defined(ARDUINO_AVR_LEONARDO)

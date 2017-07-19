@@ -1,6 +1,6 @@
 #include <Arduino.h>
+#include <Sodaq_nbIOT.h>
 #include "Sodaq_UBlox_GPS.h"
-#include "Sodaq_nbIOT.h"
 
 #if defined(ARDUINO_AVR_LEONARDO)
 #define DEBUG_STREAM Serial 
