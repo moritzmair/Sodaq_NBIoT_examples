@@ -8,6 +8,10 @@
 #define SerialOut SerialUSB
 #define UBLOX Serial
 
+#elif defined(ARDUINO_SAM_ZERO)
+#define SerialOut SerialUSB
+#define UBLOX Serial1
+
 #else
 #error "Please select a Sodaq ExpLoRer, Arduino Leonardo or add your board."
 #endif
