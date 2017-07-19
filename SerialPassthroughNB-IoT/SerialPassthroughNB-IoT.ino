@@ -1,16 +1,16 @@
 #include "Arduino.h"
 
 #if defined(ARDUINO_AVR_LEONARDO)
-#define SerialOut Serial 
-#define UBLOX Serial1
+#define DEBUG_STREAM Serial 
+#define MODEM_STREAM Serial1
 
 #elif defined(ARDUINO_SODAQ_EXPLORER)
-#define SerialOut SerialUSB
-#define UBLOX Serial
+#define DEBUG_STREAM SerialUSB
+#define MODEM_STREAM Serial
 
 #elif defined(ARDUINO_SAM_ZERO)
-#define SerialOut SerialUSB
-#define UBLOX Serial1
+#define DEBUG_STREAM SerialUSB
+#define MODEM_STREAM Serial1
 
 #else
 #error "Please select a Sodaq ExpLoRer, Arduino Leonardo or add your board."
@@ -26,22 +26,22 @@ void setup()
   digitalWrite(powerPin, HIGH);
 
   // Start communication
-  SerialOut.begin(9600);
-  UBLOX.begin(9600);
+  DEBUG_STREAM.begin(9600);
+  MODEM_STREAM.begin(9600);
 }
 
 // Forward every message to the other serial
 void loop() 
 {
-  while (SerialOut.available())
+  while (DEBUG_STREAM.available())
   {
-	uint8_t c = SerialOut.read();
-	SerialOut.write(c);
-    UBLOX.write(c);
+	  uint8_t c = DEBUG_STREAM.read();
+	  DEBUG_STREAM.write(c);
+    MODEM_STREAM.write(c);
   }
 
-  while (UBLOX.available())
+  while (MODEM_STREAM.available())
   {     
-    SerialOut.write(UBLOX.read());
+    DEBUG_STREAM.write(MODEM_STREAM.read());
   }
 }

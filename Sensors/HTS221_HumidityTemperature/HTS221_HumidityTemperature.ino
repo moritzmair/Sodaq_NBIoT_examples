@@ -13,12 +13,16 @@
 #include "Sodaq_HTS221.h"
 
 #if defined(ARDUINO_AVR_LEONARDO)
-#define SerialOut Serial 
-#define UBLOX Serial1
+#define DEBUG_STREAM Serial 
+#define MODEM_STREAM Serial1
 
 #elif defined(ARDUINO_SODAQ_EXPLORER)
-#define SerialOut SerialUSB
-#define UBLOX Serial
+#define DEBUG_STREAM SerialUSB
+#define MODEM_STREAM Serial
+
+#elif defined(ARDUINO_SAM_ZERO)
+#define DEBUG_STREAM SerialUSB
+#define MODEM_STREAM Serial1
 
 #else
 #error "Please select a Sodaq ExpLoRer, Arduino Leonardo or add your board."
@@ -27,15 +31,15 @@
 void setup() 
 {
 	delay(500);
-	SerialOut.begin(9600);
-  while (!SerialOut);             // Wait for serial monitor
-	SerialOut.println("\r\nSODAQ HTS221 Arduino Example\r\n");
+	DEBUG_STREAM.begin(9600);
+  while (!DEBUG_STREAM);             // Wait for serial monitor
+	DEBUG_STREAM.println("\r\nSODAQ HTS221 Arduino Example\r\n");
 
   delay(2000);
 
 	if (hts221.begin() == false) 
 	{
-		SerialOut.println("Error while retrieving WHO_AM_I byte...");
+		DEBUG_STREAM.println("Error while retrieving WHO_AM_I byte...");
 			while (1);
 	}
 }
@@ -43,13 +47,13 @@ void setup()
 
 void loop() 
 {
-	SerialOut.print("Humidity   : ");
-	SerialOut.print(hts221.readHumidity());
-	SerialOut.println(" %");
+	DEBUG_STREAM.print("Humidity   : ");
+	DEBUG_STREAM.print(hts221.readHumidity());
+	DEBUG_STREAM.println(" %");
 
-	SerialOut.print("Temperature: ");
-	SerialOut.print(hts221.readTemperature());
-	SerialOut.println(" celsius");
+	DEBUG_STREAM.print("Temperature: ");
+	DEBUG_STREAM.print(hts221.readTemperature());
+	DEBUG_STREAM.println(" celsius");
 
 	delay(1000);
 }

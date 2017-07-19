@@ -60,6 +60,10 @@
 #define DEBUG_STREAM SerialUSB
 #define MODEM_STREAM Serial
 
+#elif defined(ARDUINO_SAM_ZERO)
+#define DEBUG_STREAM SerialUSB
+#define MODEM_STREAM Serial1
+
 #else
 #error "Please select a Sodaq ExpLoRer, Arduino Leonardo or add your board."
 #endif

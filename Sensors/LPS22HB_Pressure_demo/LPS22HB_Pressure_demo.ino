@@ -18,6 +18,9 @@
 #elif defined(ARDUINO_SODAQ_EXPLORER)
 #define DEBUG_STREAM SerialUSB
 
+#elif defined(ARDUINO_SAM_ZERO)
+#define DEBUG_STREAM SerialUSB
+
 #else
 #error "Please select a Sodaq ExpLoRer, Arduino Leonardo or add your board."
 #endif 

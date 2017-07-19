@@ -2,8 +2,21 @@
 #include "Sodaq_UBlox_GPS.h"
 #include "Sodaq_nbIOT.h"
 
-#define MySerial        SERIAL_PORT_MONITOR
+#if defined(ARDUINO_AVR_LEONARDO)
+#define DEBUG_STREAM Serial 
 #define MODEM_STREAM Serial1
+
+#elif defined(ARDUINO_SODAQ_EXPLORER)
+#define DEBUG_STREAM SerialUSB
+#define MODEM_STREAM Serial
+
+#elif defined(ARDUINO_SAM_ZERO)
+#define DEBUG_STREAM SerialUSB
+#define MODEM_STREAM Serial1
+
+#else
+#error "Please select a Sodaq ExpLoRer, Arduino Leonardo or add your board."
+#endif
 
 #define ARRAY_DIM(arr)  (sizeof(arr) / sizeof(arr[0]))
 
@@ -44,17 +57,17 @@ void setup()
         // Wait for USB to connect
     }
 
-    MySerial.begin(57600);
+    DEBUG_STREAM.begin(57600);
     MODEM_STREAM.begin(nbiot.getDefaultBaudrate());
 
     nbiot.init(MODEM_STREAM, 7);
-    nbiot.setDiag(MySerial);
+    nbiot.setDiag(DEBUG_STREAM);
 
     if (nbiot.connect("oceanconnect.t-mobile.nl", "172.16.14.20", "20416")) {
-        MySerial.println("Connected succesfully!");
+        DEBUG_STREAM.println("Connected succesfully!");
     }
     else {
-        MySerial.println("Failed to connect!");
+        DEBUG_STREAM.println("Failed to connect!");
         return;
     }
 
@@ -69,7 +82,7 @@ void setup()
     //do_flash_led(LED_GREEN);
     //do_flash_led(LED_BLUE);
 
-    MySerial.println("SODAQ NB-IoT SAM-M8Q test is starting ...");
+    DEBUG_STREAM.println("SODAQ NB-IoT SAM-M8Q test is starting ...");
 
     sodaq_gps.init(6);
 
@@ -78,7 +91,7 @@ void setup()
     //sodaq_gps.setMinNumOfLines(10);
 
     // Uncomment the next line if you want to see the incoming $GPxxx messages
-    sodaq_gps.setDiag(MySerial);
+    sodaq_gps.setDiag(DEBUG_STREAM);
 
     // First time finding a fix
     find_fix(0);
@@ -98,12 +111,12 @@ void loop()
  */
 void find_fix(uint32_t delay_until)
 {
-    MySerial.println(String("delay ... ") + delay_until + String("ms"));
+    DEBUG_STREAM.println(String("delay ... ") + delay_until + String("ms"));
     delay(delay_until);
 
     uint32_t start = millis();
     uint32_t timeout = 900L * 1000;
-    MySerial.println(String("waiting for fix ..., timeout=") + timeout + String("ms"));
+    DEBUG_STREAM.println(String("waiting for fix ..., timeout=") + timeout + String("ms"));
     if (sodaq_gps.scan(false, timeout)) {
       String message = "";
         message +=(String(" time to find fix: ") + (millis() - start) + String("ms"));
@@ -113,12 +126,12 @@ void find_fix(uint32_t delay_until)
         message +=(String(" num sats = ") + String(sodaq_gps.getNumberOfSatellites()));
 
         if (!nbiot.sendMessage(message)) {
-          MySerial.println("Could not queue message!");
+          DEBUG_STREAM.println("Could not queue message!");
         }
     } else {
-        MySerial.println("No Fix");
+        DEBUG_STREAM.println("No Fix");
         if (!nbiot.sendMessage("No Fix")) {
-          MySerial.println("Could not queue message!");
+          DEBUG_STREAM.println("Could not queue message!");
         }
     }
 }

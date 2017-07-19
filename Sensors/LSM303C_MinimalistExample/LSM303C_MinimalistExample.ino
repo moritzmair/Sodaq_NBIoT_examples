@@ -14,13 +14,13 @@
 LSM303C myIMU;
 
 #if defined(ARDUINO_AVR_LEONARDO)
-//#define SerialOut Serial 
-//#define UBLOX Serial1
+#define DEBUG_STREAM Serial 
 
 #elif defined(ARDUINO_SODAQ_EXPLORER)
 #error "Sodaq ExpLoRer is not supporter yet."
-//#define SerialOut SerialUSB
-//#define UBLOX Serial
+
+#elif defined(ARDUINO_SAM_ZERO)
+#error "Arduino Zero / M0 is not supporter yet."
 
 #else
 #error "Please select a Sodaq ExpLoRer, Arduino Leonardo or add your board."
@@ -28,15 +28,15 @@ LSM303C myIMU;
 
 void setup()
 {
-  Serial.begin(115200);
+  DEBUG_STREAM.begin(115200);
 
   Wire.begin();
 
-  while (!Serial);
+  while (!DEBUG_STREAM);
   
   if (myIMU.begin() != IMU_SUCCESS)
   {
-    Serial.println("Failed setup.");
+    DEBUG_STREAM.println("Failed setup.");
     while(1);
   }
 }
@@ -44,36 +44,27 @@ void setup()
 void loop()
 {
   //Get all parameters
-  Serial.print("\nAccelerometer:\n");
-  Serial.print(" X = ");
-  Serial.println(myIMU.readAccelX(), 4);
-  Serial.print(" Y = ");
-  Serial.println(myIMU.readAccelY(), 4);
-  Serial.print(" Z = ");
-  Serial.println(myIMU.readAccelZ(), 4);
+  DEBUG_STREAM.print("\nAccelerometer:\n");
+  DEBUG_STREAM.print(" X = ");
+  DEBUG_STREAM.println(myIMU.readAccelX(), 4);
+  DEBUG_STREAM.print(" Y = ");
+  DEBUG_STREAM.println(myIMU.readAccelY(), 4);
+  DEBUG_STREAM.print(" Z = ");
+  DEBUG_STREAM.println(myIMU.readAccelZ(), 4);
 
-  // Not supported by hardware, so will return NAN
-  Serial.print("\nGyroscope:\n");
-  Serial.print(" X = ");
-  Serial.println(myIMU.readGyroX(), 4);
-  Serial.print(" Y = ");
-  Serial.println(myIMU.readGyroY(), 4);
-  Serial.print(" Z = ");
-  Serial.println(myIMU.readGyroZ(), 4);
+  DEBUG_STREAM.print("\nMagnetometer:\n");
+  DEBUG_STREAM.print(" X = ");
+  DEBUG_STREAM.println(myIMU.readMagX(), 4);
+  DEBUG_STREAM.print(" Y = ");
+  DEBUG_STREAM.println(myIMU.readMagY(), 4);
+  DEBUG_STREAM.print(" Z = ");
+  DEBUG_STREAM.println(myIMU.readMagZ(), 4);
 
-  Serial.print("\nMagnetometer:\n");
-  Serial.print(" X = ");
-  Serial.println(myIMU.readMagX(), 4);
-  Serial.print(" Y = ");
-  Serial.println(myIMU.readMagY(), 4);
-  Serial.print(" Z = ");
-  Serial.println(myIMU.readMagZ(), 4);
-
-  Serial.print("\nThermometer:\n");
-  Serial.print(" Degrees C = ");
-  Serial.println(myIMU.readTempC(), 4);
-  Serial.print(" Degrees F = ");
-  Serial.println(myIMU.readTempF(), 4);
+  DEBUG_STREAM.print("\nThermometer:\n");
+  DEBUG_STREAM.print(" Degrees C = ");
+  DEBUG_STREAM.println(myIMU.readTempC(), 4);
+  DEBUG_STREAM.print(" Degrees F = ");
+  DEBUG_STREAM.println(myIMU.readTempF(), 4);
   
   delay(1000);
 }
