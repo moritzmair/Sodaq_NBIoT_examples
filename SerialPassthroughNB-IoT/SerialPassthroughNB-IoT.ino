@@ -35,7 +35,9 @@ void loop()
 {
   while (SerialOut.available())
   {
-    UBLOX.write(SerialOut.read());
+	uint8_t c = SerialOut.read();
+	SerialOut.write(c);
+    UBLOX.write(c);
   }
 
   while (UBLOX.available())
