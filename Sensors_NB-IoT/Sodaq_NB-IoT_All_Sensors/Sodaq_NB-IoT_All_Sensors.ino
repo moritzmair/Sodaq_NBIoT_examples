@@ -97,6 +97,9 @@
  Sodaq_nbIOT nbiot;
  Sodaq_LPS22HB lps22hb;
 
+ uint32_t lat = 0;
+ uint32_t lon = 0;
+
  void setup();
  bool connectToNetwork();
  void initHumidityTemperature();
@@ -164,7 +167,7 @@
 
  void initGPS() {
 	 sodaq_gps.init(6);
-	 sodaq_gps.setDiag(DEBUG_STREAM);
+	 // sodaq_gps.setDiag(DEBUG_STREAM);
  }
 
 
@@ -179,41 +182,47 @@
 	 int16_t pressure;
 
 	 temperature = hts221.readTemperature() * 100;
-	 DEBUG_STREAM.println(temperature);
+	 DEBUG_STREAM.println("Temperature x100 : " + (String)temperature);
 	 message[cursor++] = temperature >> 8;
 	 message[cursor++] = temperature;
 
+	 delay(100);
+
 	 humidity = hts221.readHumidity() * 100;
-	 DEBUG_STREAM.println(humidity);
+	 DEBUG_STREAM.println("Humidity x100 : " + (String)humidity);
 	 message[cursor++] = humidity >> 8;
 	 message[cursor++] = humidity;
 
+	 delay(100);
+
 	 pressure = lps22hb.readPressure() ;
-	 DEBUG_STREAM.println(pressure);
+	 DEBUG_STREAM.println("Pressure:" + (String)pressure);
 	 message[cursor++] = pressure >> 8;
 	 message[cursor++] = pressure;
 
 	 uint32_t start = millis();
-	 uint32_t timeout = 2UL * 01 * 1000; // 2 min timeout
+	 uint32_t timeout = 2UL * 60 * 1000; // 2 min timeout
 	 
 	 DEBUG_STREAM.println(String("waiting for fix ..., timeout=") + timeout + String("ms"));
 	 if (sodaq_gps.scan(true, timeout)) {
 
-		 uint32_t lat = sodaq_gps.getLat() * 100000;
-		 message[cursor++] = lat >> 24;
-		 message[cursor++] = lat >> 16;
-		 message[cursor++] = lat >> 8;
-		 message[cursor++] = lat;
-
-		 uint32_t lon = sodaq_gps.getLon() * 100000;
-		 message[cursor++] = lon >> 24;
-		 message[cursor++] = lon >> 16;
-		 message[cursor++] = lon >> 8;
-		 message[cursor++] = lon;
+		 lat = sodaq_gps.getLat() * 100000;
+		 lon = sodaq_gps.getLon() * 100000;
 	 }
 	 else {
 		 DEBUG_STREAM.println("No Fix");
 	 } 
+
+	 message[cursor++] = lat >> 24;
+	 message[cursor++] = lat >> 16;
+	 message[cursor++] = lat >> 8;
+	 message[cursor++] = lat;
+
+	
+	 message[cursor++] = lon >> 24;
+	 message[cursor++] = lon >> 16;
+	 message[cursor++] = lon >> 8;
+	 message[cursor++] = lon;
 
 	 // Print the message we want to send
 	 // DEBUG_STREAM.println(message);
