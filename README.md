@@ -10,5 +10,7 @@ Required libraries:
 - Sodaq_wdt https://github.com/SodaqMoja/Sodaq_wdt
 
 More information support.sodaq.com
+
 Questions? Use our forum: forum.sodaq.com
+
 All questions in github will be closed without any answer.
