@@ -137,7 +137,7 @@
  }
 
  bool connectToNetwork() {
-	 if (nbiot.connect("oceanconnect.t-mobile.nl", "172.16.14.20", "20416")) {
+	 if (nbiot.connect("oceanconnect.t-mobile.nl", "172.16.14.22", "20416")) {
 		 DEBUG_STREAM.println("Connected succesfully!");
 		 return true;
 	 }
