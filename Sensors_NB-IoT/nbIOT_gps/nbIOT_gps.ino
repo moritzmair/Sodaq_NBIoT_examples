@@ -52,10 +52,9 @@ void do_flash_led(int pin);
 
 void setup()
 {
-    delay(3000);
-    while (!SerialUSB) {
-        // Wait for USB to connect
-    }
+   while ((!DEBUG_STREAM) || (millis() < 10000)) {
+     // Wait for serial monitor for 10 seconds
+   }
 
     DEBUG_STREAM.begin(57600);
     MODEM_STREAM.begin(nbiot.getDefaultBaudrate());

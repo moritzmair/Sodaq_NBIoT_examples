@@ -72,11 +72,12 @@
 
  void setup()
  {
-	 delay(500);
-	 DEBUG_STREAM.begin(9600);
-	 MODEM_STREAM.begin(nbiot.getDefaultBaudrate());
+	 while ((!DEBUG_STREAM) || (millis() < 10000)) {
+     // Wait for serial monitor for 10 seconds
+   }
 
-	 //while ((!DEBUG_STREAM));// Wait for serial monitor
+   DEBUG_STREAM.begin(9600);
+   MODEM_STREAM.begin(nbiot.getDefaultBaudrate());
 
 	 DEBUG_STREAM.println("\r\nSODAQ HTS221 Arduino Example\r\n");
 

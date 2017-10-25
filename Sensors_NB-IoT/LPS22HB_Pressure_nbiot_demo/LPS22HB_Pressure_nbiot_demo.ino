@@ -34,11 +34,13 @@ Sodaq_LPS22HB lps22hb;
 
 void setup()
 {
-	delay(500);
+  while ((!DEBUG_STREAM) || (millis() < 10000)) {
+    // Wait for serial monitor for 10 seconds
+  }
+   
 	DEBUG_STREAM.begin(9600);
   MODEM_STREAM.begin(nbiot.getDefaultBaudrate());
  
-  while (!Serial);             // Leonardo: wait for serial monitor
 	DEBUG_STREAM.println("\r\nSODAQ LPS22HB Arduino Example\r\n");
 
   nbiot.init(MODEM_STREAM, 7);

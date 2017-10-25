@@ -33,7 +33,9 @@ void setup()
 	DEBUG_STREAM.begin(9600);
   MODEM_STREAM.begin(nbiot.getDefaultBaudrate());
   
-  //while ((!DEBUG_STREAM));// Wait for serial monitor
+  while ((!DEBUG_STREAM) || (millis() < 10000)) {
+    // Wait for serial monitor for 10 seconds
+  }
 	
 	DEBUG_STREAM.println("\r\nSODAQ NB-IoT Hello World Arduino Example\r\n");
 
