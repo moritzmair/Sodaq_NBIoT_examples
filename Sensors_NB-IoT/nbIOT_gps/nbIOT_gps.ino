@@ -52,7 +52,7 @@ void do_flash_led(int pin);
 
 void setup()
 {
-   while ((!DEBUG_STREAM) || (millis() < 10000)) {
+   while ((!DEBUG_STREAM) && (millis() < 10000)) {
      // Wait for serial monitor for 10 seconds
    }
 

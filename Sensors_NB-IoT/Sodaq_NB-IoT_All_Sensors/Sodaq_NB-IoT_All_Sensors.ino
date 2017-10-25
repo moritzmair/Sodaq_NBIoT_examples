@@ -111,12 +111,12 @@
  void setup()
  {
 	 pinMode(13, OUTPUT);
-	 digitalWrite(13, HIGH);
+	 digitalWrite(13, LOW);
 
 	 DEBUG_STREAM.begin(9600);
 	 MODEM_STREAM.begin(nbiot.getDefaultBaudrate());
 
-	 while ((!DEBUG_STREAM) || (millis() < 10000)) {
+	 while ((!DEBUG_STREAM) && (millis() < 10000)) {
 		 // Wait for serial monitor for 10 seconds
 	 }
 
@@ -249,5 +249,7 @@
 		 digitalWrite(pin, LOW);
 		 delay(100);
 		 digitalWrite(pin, HIGH);
+     delay(100);
+     digitalWrite(pin, LOW);
 	 }
  }
