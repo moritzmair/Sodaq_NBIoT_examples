@@ -116,8 +116,8 @@ bool Sodaq_UBlox_GPS::scan(bool leave_on, uint32_t timeout)
 //               && (_minNumSatellites == 0 || _numSatellites >= _minNumSatellites)) {
             ++fix_count;
             if (fix_count >= _minNumOfLines) {
-                retval = true;
-                break;
+                //retval = true;
+                //break;
             }
         }
     //debugPrint("Num satellites ");
@@ -192,7 +192,6 @@ bool Sodaq_UBlox_GPS::parseLine(const char * line)
         return parseGPTXT(data);
     }
 
-    debugPrintLn(String("?? >> ") + line);
     return false;
 }
 
@@ -225,8 +224,7 @@ bool Sodaq_UBlox_GPS::parseLine(const char * line)
  */
 bool Sodaq_UBlox_GPS::parseGPGGA(const String & line)
 {
-    debugPrintLn("parseGPGGA");
-    debugPrintLn(String(">> ") + line);
+    debugPrintLn(String("$") + line);
     if (getField(line, 6) != "0") {
         _lat = convertDegMinToDecDeg(getField(line, 2));
         if (getField(line, 3) == "S") {
@@ -256,8 +254,7 @@ bool Sodaq_UBlox_GPS::parseGPGGA(const String & line)
 bool Sodaq_UBlox_GPS::parseGPGSA(const String & line)
 {
     // Not (yet) used
-    debugPrintLn("parseGPGSA");
-    debugPrintLn(String(">> ") + line);
+    debugPrintLn(String("$") + line);
     return false;
 }
 
@@ -282,8 +279,7 @@ bool Sodaq_UBlox_GPS::parseGPGSA(const String & line)
  */
 bool Sodaq_UBlox_GPS::parseGPRMC(const String & line)
 {
-    debugPrintLn("parseGPRMC");
-    debugPrintLn(String(">> ") + line);
+    debugPrintLn(String("$") + line);
 
     if (getField(line, 2) == "A" && getField(line, 12) != "N") {
         _lat = convertDegMinToDecDeg(getField(line, 3));
@@ -322,8 +318,7 @@ bool Sodaq_UBlox_GPS::parseGPRMC(const String & line)
  */
 bool Sodaq_UBlox_GPS::parseGPGSV(const String & line)
 {
-    debugPrintLn("parseGPGSV");
-    debugPrintLn(String(">> ") + line);
+    debugPrintLn(String("$") + line);
 
     // We could/should only use msgNum == 1. However, all messages should have
     // the same numSV.
@@ -340,8 +335,7 @@ bool Sodaq_UBlox_GPS::parseGPGSV(const String & line)
 bool Sodaq_UBlox_GPS::parseGPGLL(const String & line)
 {
     // Not (yet) used
-    debugPrintLn("parseGPGLL");
-    debugPrintLn(String(">> ") + line);
+    debugPrintLn(String("$") + line);
     return false;
 }
 
@@ -352,8 +346,7 @@ bool Sodaq_UBlox_GPS::parseGPGLL(const String & line)
 bool Sodaq_UBlox_GPS::parseGPVTG(const String & line)
 {
     // Not (yet) used
-    debugPrintLn("parseGPVTG");
-    debugPrintLn(String(">> ") + line);
+    debugPrintLn(String("$") + line);
     return false;
 }
 
